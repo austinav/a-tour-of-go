@@ -1,3 +1,8 @@
+//This was first starting approach, but I tried looking through the go sync doc page
+//and found the sync.Map and was skipping right to that without fully understanding how it works
+//the real solution uses the pieces discussed in the lesson https://tip.golang.org/tour/solutions/webcrawler.go
+
+//The problem is my solution runs without error, but once we hit the first go Crawl() logging is lost and I am not sure why.
 package main
 
 import (
@@ -18,10 +23,12 @@ var (
 // Crawl uses fetcher to recursively crawl
 // pages starting with url, to a maximum of depth.
 func Crawl(url string, depth int, fetcher Fetcher) {
+	fmt.Printf("still print at depth %v\n", depth)
 	if depth <= 0 {
 		return
 	}
-	if _, found := fetched.Load(url); found {
+	if u, found := fetched.Load(url); found {
+		fmt.Printf("%v already fetched\n", u) 
 		return
 	}
 	body, urls, err := fetcher.Fetch(url)
