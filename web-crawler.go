@@ -33,12 +33,13 @@ func Crawl(url string, depth int, fetcher Fetcher) {
 	}
 	body, urls, err := fetcher.Fetch(url)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Printf("%v failed: %v\n", url, err)
 		return
 	}
 	fetched.Store(url, &fakeResult{body, urls})
 	fmt.Printf("found: %s %q\n", url, body)
 	for _, u := range urls {
+		fmt.Printf("%v, %v, %v\n", u, depth-1, fetcher)
 		go Crawl(u, depth-1, fetcher)
 	}
 	return
@@ -46,6 +47,12 @@ func Crawl(url string, depth int, fetcher Fetcher) {
 
 func main() {
 	Crawl("https://golang.org/", 4, fetcher)
+	
+	fmt.Println("\nFetching stats\n--------------")
+	fetched.Range(func(key, value any) bool {
+		fmt.Printf("%v was fetched\n", key)
+		return true
+	})
 }
 
 // fakeFetcher is Fetcher that returns canned results.
