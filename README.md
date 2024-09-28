@@ -1,6 +1,107 @@
 # a-tour-of-go
 Answers from the go language tour. Decided to create during last exercise so this may not be completed
 
+## Maps
+[embedmd]:# (maps.go)
+```go
+package main
+
+import (
+	"strings"
+
+	"golang.org/x/tour/wc"
+)
+
+func WordCount(s string) map[string]int {
+	result := make(map[string]int)
+	for _, w := range strings.Fields(s) {
+		_, ok := result[w]
+		if ok {
+			result[w]++
+		} else {
+			result[w] = 1
+		}
+	}
+
+	return result
+}
+
+func main() {
+	wc.Test(WordCount)
+}
+```
+
+## Fibonacci Closure
+[embedmd]:# (fibonacci-closures.go)
+```go
+package main
+
+import "fmt"
+
+// fibonacci is a function that returns
+// a function that returns an int.
+func fibonacci() func() int {
+	first := false
+	second := false
+	lastFib := 0
+	currentFib := 1
+	return func() int {
+		if !first {
+			first = true
+			return 0
+		}
+		if !second {
+			second = true
+			return 1
+		}
+
+		result := lastFib + currentFib
+
+		lastFib = currentFib
+		currentFib = result
+
+		return result
+	}
+}
+
+func main() {
+	f := fibonacci()
+	for i := 0; i < 10; i++ {
+		fmt.Println(f())
+	}
+}
+```
+
+## Stringers
+[embedmd]:# (stringers.go)
+```go
+//Exercise: Stringers
+//Make the IPAddr type implement fmt.Stringer to print the address as a dotted quad.
+
+//For instance, IPAddr{1, 2, 3, 4} should print as "1.2.3.4".
+
+package main
+
+import "fmt"
+
+type IPAddr [4]byte
+
+// TODO: Add a "String() string" method to IPAddr.
+
+func main() {
+
+	hosts := map[string]IPAddr{
+		"loopback":  {127, 0, 0, 1},
+		"googleDNS": {8, 8, 8, 8},
+	}
+	for name, ip := range hosts {
+
+		fmt.Printf("%v: %v\n", name, ip)
+	}
+
+}
+```
+
 ## Web Crawler
 Some potential for creativity over the standard solution with only topics directly covered in the tour
 [embedmd]:# (web-crawler.go)
