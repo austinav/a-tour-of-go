@@ -1,8 +1,8 @@
-//This was first starting approach, but I tried looking through the go sync doc page
-//and found the sync.Map and was skipping right to that without fully understanding how it works
-//the real solution uses the pieces discussed in the lesson https://tip.golang.org/tour/solutions/webcrawler.go
+// This was first starting approach, but I tried looking through the go sync doc page
+// and found the sync.Map and was skipping right to that without fully understanding how it works
+// the real solution uses the pieces discussed in the lesson https://tip.golang.org/tour/solutions/webcrawler.go
 
-//The problem is my solution runs without error, but once we hit the first go Crawl() logging is lost and I am not sure why.
+// The problem is my solution runs without error, but once we hit the first go Crawl() logging is lost and I am not sure why.
 package main
 
 import (
@@ -16,9 +16,7 @@ type Fetcher interface {
 	Fetch(url string) (body string, urls []string, err error)
 }
 
-var (
-	fetched sync.Map
-)
+var fetched sync.Map
 
 // Crawl uses fetcher to recursively crawl
 // pages starting with url, to a maximum of depth.
@@ -28,7 +26,7 @@ func Crawl(url string, depth int, fetcher Fetcher) {
 		return
 	}
 	if u, found := fetched.Load(url); found {
-		fmt.Printf("%v already fetched\n", u) 
+		fmt.Printf("%v already fetched\n", u)
 		return
 	}
 	body, urls, err := fetcher.Fetch(url)
@@ -45,9 +43,9 @@ func Crawl(url string, depth int, fetcher Fetcher) {
 	return
 }
 
-func main() {
+func web_crawler() {
 	Crawl("https://golang.org/", 4, fetcher)
-	
+
 	fmt.Println("\nFetching stats\n--------------")
 	fetched.Range(func(key, value any) bool {
 		fmt.Printf("%v was fetched\n", key)

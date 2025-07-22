@@ -4,4 +4,5 @@ go 1.23.1
 
 require (
 	github.com/campoy/embedmd v1.0.0 // indirect
+	golang.org/x/tour v0.1.0
 )
